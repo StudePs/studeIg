@@ -11,7 +11,14 @@ app.use(express.json());
 const users = [];
 
 function checksExistsUserAccount(request, response, next) {
-  // Complete aqui
+  const { username } = request.headers;
+  
+  const userSelected = users.find(user => user.username === username);
+  if (!userSelected) {
+    return response.status(400).json({ statusCode: 400, message: 'user not found' });    
+  }
+  request.user = userSelected;
+  return next();
 }
 
 app.post('/users', (request, response) => {
@@ -23,15 +30,19 @@ app.post('/users', (request, response) => {
     username,
     todos: []
   };
+  if(users.some(user => user.username === username)) {
+    response.status(400).json({ statusCode: 400, error: 'username already exists' }) 
+  }
   users.push(newUser);
-  console.log(newUser);
   
   response.status(201).json(newUser);
 
 });
 
-app.get('/todos', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+app.get('/todos', checksExistsUserAccount, (request, response) => {  
+  const { user } = request;
+
+  response.json(user.todos);
 });
 
 app.post('/todos', checksExistsUserAccount, (request, response) => {
