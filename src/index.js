@@ -24,6 +24,7 @@ app.post('/users', (request, response) => {
     todos: []
   };
   users.push(newUser);
+  console.log(newUser);
   
   response.status(201).json(newUser);
 
