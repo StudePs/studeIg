@@ -54,7 +54,7 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
     title,
     done: false,
     deadline: new Date(deadline),
-    create_at: new Date()
+    created_at: new Date()
   };
   user.todos.push(todo);
   return response.status(201).json(todo);
@@ -86,7 +86,7 @@ app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
   }
   todo.done = true;
 
-  return response.status(204).json(todo);
+  return response.status(200).json(todo);
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, (request, response) => {
